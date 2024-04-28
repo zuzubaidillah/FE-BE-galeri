@@ -57,7 +57,7 @@ Response Body Error(500) : jika ada salah kode php atau salah proses koneksi ke 
 }
 ```
 
-## Mengambil detail User API spesifikasi
+## Mengambil User berdasarkan id API spesifikasi
 
 Endpoint :  GET /smkti/FE-BE-galeri/restapi/api/users/{{users_id}}
 
@@ -176,6 +176,8 @@ Endpoint :  PUT /smkti/FE-BE-galeri/restapi/api/users/{{users_id}}
 
 Bussiness Logic:
 
+- cek request dari client
+- cari data berdasarkan table *users* kolom *id*
 - cek nama yang sama, tambahkan logika tidak sama dengan users_id
 - cek email yang sama, tambahkan logika tidak sama dengan users_id
 - sebelum menyimpan no telpon, pastikan diformat dengan 628 karena akan dimanfaatkan untuk kirim pesan whatsapp
@@ -215,6 +217,14 @@ Response Body Error(400) : ketika request tidak sesuai
 ```json
 {
   "message": "Data tidak lengkap"
+}
+```
+
+Response Body Error(404) : ketika users_id tidak ditemukan
+
+```json
+{
+  "message": "Data tidak ditemukan"
 }
 ```
 
