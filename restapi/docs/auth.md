@@ -4,16 +4,16 @@
 
 - struktur table: **users**
 
-| kolom      | type     |                                                                                                   |
-|:-----------|:---------|:--------------------------------------------------------------------------------------------------|
-| id         | int      | AI, not null                                                                                      |
-| nama       | varchar  | not null                                                                                          |
-| no_telpon  | varchar  | not null                                                                                          |
-| email      | varchar  | not null                                                                                          |
-| password   | varchar  | nilai yang disimpan harus berbentuk enkripsi,<br/> tidak boleh menggunakan nilai **ASLI**         |
-| level      | enum     | [super admin, admin]                                                                              |
-| tgl_buat   | datetime | null                                                                                              |
-| tgl_update | datetime | null                                                                                          |
+| kolom      | type     |                                                                                           |
+|:-----------|:---------|:------------------------------------------------------------------------------------------|
+| id         | int      | AI, not null                                                                              |
+| nama       | varchar  | not null, uniqe                                                                           |
+| no_telpon  | varchar  | not null                                                                                  |
+| email      | varchar  | not null, uniqe                                                                           |
+| password   | varchar  | nilai yang disimpan harus berbentuk enkripsi,<br/> tidak boleh menggunakan nilai **ASLI** |
+| level      | enum     | [super admin, admin]                                                                      |
+| tgl_buat   | datetime | null                                                                                      |
+| tgl_update | datetime | null                                                                                      |
 
 - buat data untuk level super admin di table **users**
 
