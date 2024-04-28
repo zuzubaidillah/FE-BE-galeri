@@ -5,12 +5,13 @@ namespace Config;
 header("Content-type: application/json");
 class Route
 {
-    private static $routes = [
+    /*private static $routes = [
         "POST" => [
             "/smkti/restapi-bookshelf-level2/api/registrasi" => "function",
             "/smkti/restapi-bookshelf-level2/api/auth/registrasi" => "function"
         ]
-    ];
+    ];*/
+    private static $routes = [];
     public static function get($uri, $action)
     {
         self::$routes['GET'][$uri] = $action;

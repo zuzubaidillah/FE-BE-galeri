@@ -7,7 +7,7 @@ use PDOException;
 class Database
 {
     private $host = "localhost";
-    private $db_name = "bookshelf-level2";
+    private $db_name = "proyek_galeri";
     private $username = "root";
     private $password = "";
     public $stmt;

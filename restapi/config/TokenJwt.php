@@ -20,7 +20,7 @@ class TokenJwt
         try {
             $decoded = JWT::decode($jwt, new Key($this->key, 'HS256'));
             return [
-                "user_id" => $decoded->user_id
+                "users_id" => $decoded->users_id
             ];
         } catch (ExpiredException $e) {
             http_response_code(401);
@@ -43,7 +43,7 @@ class TokenJwt
             "aud" => $this->domain, // Audience
             "iat" => time(), // Waktu di mana token diterbitkan
             "exp" => time() + 24*60 * 60, //24 * 60 * 60, // Expire dalam 24 jam
-            "user_id" => $id // Menambahkan user_id ke payload
+            "users_id" => $id // Menambahkan users_id ke payload
         ];
         return JWT::encode($payload, $this->key, 'HS256');
     }

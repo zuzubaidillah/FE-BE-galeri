@@ -1,46 +1,40 @@
 <?php
-namespace Model;
+namespace model;
 require_once __DIR__ . "/../config/Database.php";
 
 use Config\{Database};
 use PDOException;
 
-class Users
+class Galeri
 {
-    private $table_name = "users";
+    private $table_name = "galeri";
     private $db;
 
     public $id;
-    public $name;
-    public $email;
-    public $password;
+    public $nama;
+    public $file;
+    public $file_type;
+    public $file_size;
 
     public function __construct()
     {
         $this->db = new Database();
     }
 
-    public function allData() {
-        $query = "SELECT id, nama, email, level, tgl_buat, tgl_update
-        FROM users
-        ORDER BY tgl_buat DESC";
+    public function findLikeNama($nama) {
+        $query = "SELECT galeri.*, users.nama as users_nama, users.level as users_level,
+        FROM galeri
+        INNER JOIN users ON galeri.users_id = users.id
+        WHERE galeri.nama LIKE :nama";
         $this->db->query($query);
-        return $this->db->resultSet();
-    }
-
-    public function findEmail($email) {
-        $query = "SELECT *
-        FROM users
-        WHERE email = :email";
-        $this->db->query($query);
-        $this->db->bind('email', $email);
+        $this->db->bind('nama', "%$nama%");
         return $this->db->single();
     }
 
     /**
      * form_data [name,email,password(has)]
      */
-    public function registrasi($form_data)
+    public function data_baru($form_data)
     {
         try {
             $query = "INSERT INTO $this->table_name 
@@ -70,8 +64,7 @@ class Users
 
     public function findId($users_id)
     {
-        $query = "SELECT id, nama, email, level, tgl_buat, tgl_update 
-        FROM users WHERE id=:id";
+        $query = "SELECT * FROM galeri WHERE id=:id";
         $this->db->query($query);
         $this->db->bind('id', $users_id);
         return $this->db->single();
