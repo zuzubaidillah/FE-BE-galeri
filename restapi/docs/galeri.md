@@ -1,36 +1,39 @@
 # Auth API Spec (api spesifikasi)
 
-## Register User API spesifikasi
+## Persiapan data
 
-- struktur table: **users**
+- struktur table: **galeri**
 
-| kolom      | type     |    |
-|:-----------|:---------|:---|
-| id         | int      | AI |
-| nama       | varchar  |    |
-| file_name  | varchar  |    |
-| file_type  | False    |    |
-| file_size  | int      |    |
-| tgl_buat   | datetime |    |
-| tgl_update | datetime |    |
+| kolom      | type     |          |
+|:-----------|:---------|:---------|
+| id         | int      | AI       |
+| nama       | varchar  | not null |
+| file_name  | varchar  | not null |
+| file_type  | False    | null     |
+| file_size  | int      | null     |
+| tgl_buat   | datetime | not null |
+| tgl_update | datetime | not null |
+| users_id   | int      | not null |
 
-## Register User API spesifikasi
+## Mengambil data galeri API spesifikasi
 
-Endpoint :  POST /smkti/FE-BE-galeri/restapi/api/auth/registrasi
+Endpoint :  GET /smkti/FE-BE-galeri/restapi/api/galeri
 
 Bussiness Logic:
-- cek email yang sama
-- password jadi enkripsi sebelum disimpan
-- simpan data
-- response data yang baru saja di simpan
 
-Request Body :
+- response data galeri secara keseluruhan
+- client request params filter_q
+  - maka, saat mengambil data di table *galeri* tambahkan *where* pada kolom *nama* dan gunakan perintah *like*
+- client request params filter_users_id
+  - maka, saat mengambil data di table *galeri* tambahkan *where* pada kolom *users_id* dan gunakan perintah *=*
+- urutkan data berdasarkan *tgl_buat* desc
+
+Request params :
 
 ```json
 {
-  "name": "Ronaldo", // isRequired
-  "email": "ronaldo@gmail.com", // isRequired
-  "password": "ronaldo" // isRequired
+  "filter_q": "", // optional | akan mencari data users berdasarkan kolom [nama]
+  "filter_users_id": 0 // optional
 }
 ```
 
@@ -39,14 +42,114 @@ Response Body Success(200) : ketika request body sesuai
 ```json
 {
   "message": "Registrasi berhasil",
+  "data": [
+    {
+      "id": 1,
+      "name": "Ronaldo",
+      "file": "/galeri/3923sas-s2323.png",
+      "file_type": "png",
+      "file_size": 2000,
+      "tgl_buat": "2024-01-17 13:58:07",
+      "tgl_update": "2024-01-17 13:58:07",
+      "users_id": 1,
+      "users_name": "Ronaldo",
+      "users_level": "super admin"
+    }
+  ]
+}
+```
+
+Response Body Error(500) : jika ada salah kode php atau salah proses koneksi ke database
+
+```json
+{
+  "message": "SQLSTATE[HY000] [1049] Unknown database 'bookshelf-acak'"
+}
+```
+
+## Mengambil Galeri berdasarkan id API spesifikasi
+
+Endpoint :  GET /smkti/FE-BE-galeri/restapi/api/galeri/{{galeri_id}}
+
+Bussiness Logic:
+
+- cek request client
+- cari data berdasarkan table *galeri* kolom *id*
+- response data users berdasarkan params *galeri_id*
+
+Response Body Success(200) : ketika request body sesuai
+
+```json
+{
+  "message": "Berhasil",
   "data": {
     "id": 1,
     "name": "Ronaldo",
-    "email": "ronaldo@gmail.com",
-    "file": null,
-    "created_at": "2024-01-17 13:58:07",
-    "updated_at": null,
-    "deleted_at": null
+    "file": "/galeri/3923sas-s2323.png",
+    "file_type": "png",
+    "file_size": 2000,
+    "tgl_buat": "2024-01-17 13:58:07",
+    "tgl_update": "2024-01-17 13:58:07",
+    "users_id": 1,
+    "users_name": "Ronaldo",
+    "users_level": "super admin"
+  }
+}
+```
+
+Response Body Error(404) : jika galeri_id yang dikirim tidak ditemukan
+
+```json
+{
+  "message": "Data tidak ditemukan"
+}
+```
+
+Response Body Error(500) : jika ada salah kode php atau salah proses koneksi ke database
+
+```json
+{
+  "message": "SQLSTATE[HY000] [1049] Unknown database 'bookshelf-acak'"
+}
+```
+
+## Membuat Galeri Baru API spesifikasi
+
+Endpoint :  POST /smkti/FE-BE-galeri/restapi/api/galeri
+
+Bussiness Logic:
+
+- cek nama yang sama
+- cek request file harus tipe: [png, jpg, jpeg]
+- simpan file kedalam folder galeri
+- simpan data
+- response data yang baru saja di simpan
+
+Request Body form-data : gunakan (multipart-form-data)
+
+```json
+{
+  "nama": "Ronaldo", // isRequired | string
+  "file": (binary) // isRequired | string
+}
+```
+
+Response Body Success(200) : ketika request body sesuai
+
+```json
+{
+  "message": "Berhasil",
+  "data": {
+    "id": 1,
+    "name": "Ronaldo",
+    "file": "/galeri/3923sas-s2323.png",
+    "file_type": "png",
+    "file_size": 2000,
+    "tgl_buat": "2024-01-17 13:58:07",
+    "tgl_update": "2024-01-17 13:58:07",
+    "users_id": 1,
+    "users_name": "Ronaldo",
+    "users_level": "super admin"
   }
 }
 ```
@@ -55,15 +158,23 @@ Response Body Error(400) : ketika request tidak sesuai
 
 ```json
 {
-  "message": "Data tidak lengkap harus diisi"
+  "message": "Data tidak lengkap"
 }
 ```
 
-Response Body Error(409) : ketika email sudah ada
+Response Body Error(409) : ketika nama sudah ada
 
 ```json
 {
-  "message": "Email sudah digunakan"
+  "message": "Nama sudah digunakan"
+}
+```
+
+Response Body Error(400) : ketika file tidak sesuai kriteria
+
+```json
+{
+  "message": "File harus berupa: jpg,jpeg dan png"
 }
 ```
 
@@ -75,57 +186,67 @@ Response Body Error(500) : jika ada salah kode php atau salah proses koneksi ke 
 }
 ```
 
-## Login User API spesifikasi
+## Merubah data Galeri API spesifikasi
 
-Endpoint :  POST /smkti/FE-BE-galeri/restapi/api/auth/login
+Endpoint :  PUT /smkti/FE-BE-galeri/restapi/api/galerigaleri_id}}
 
 Bussiness Logic:
-- validasi request dari client
-- verifikasi email
-- verifikasi password
-- membuat token menggunakan JWT (JSON Web Token)
-- response data sesuai verifikasi email dan password, beserta token yang telah dibuat
+
+- cek request dari client
+- cari data berdasarkan table *galeri* kolom *id*
+- cek nama yang sama, tambahkan logika tidak sama dengan galeri_id
+- simpan data
+- response data yang baru saja di simpan
 
 Request Body :
 
 ```json
 {
-  "email": "ronaldo@gmail.com", // isRequired
-  "password": "ronaldo" // isRequired
+  "nama": "Ronaldo" // isRequired | string
 }
 ```
 
-Response Body Success(200) :
+Response Body Success(200) : ketika request body sesuai
 
 ```json
 {
+  "message": "Berhasil",
   "data": {
     "id": 1,
     "name": "Ronaldo",
-    "email": "ronaldo@gmail.com",
-    "file": null,
-    "created_at": "2024-01-17 13:58:07",
-    "updated_at": null,
-    "deleted_at": null
-  },
-  "message": "Login berhasil",
-  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8veW91cmRvbWFpbi5jb20iLCJhdWQiOiJodHRwOi8veW91cmRvbWFpbi5jb20iLCJpYXQiOjE3MDU1MDEzNjMsImV4cCI6MTcwNTUwMTQ4MywidXNlcl9pZCI6MX0.khWRvPvQJhgpRuBW0KYAaScGgN-uoRly8_CnPL-WgEE"
+    "file": "/galeri/3923sas-s2323.png",
+    "file_type": "png",
+    "file_size": 2000,
+    "tgl_buat": "2024-01-17 13:58:07",
+    "tgl_update": "2024-01-17 13:58:07",
+    "users_id": 1,
+    "users_name": "Ronaldo",
+    "users_level": "super admin"
+  }
 }
 ```
 
-Response Body Error(400) : ketika request body tidak sesuai
+Response Body Error(400) : ketika request tidak sesuai
 
 ```json
 {
-  "message": "Data tidak lengkap harus diisi"
+  "message": "Data tidak lengkap"
 }
 ```
 
-Response Body Error(400) : ketika salah memasukan email / password
+Response Body Error(404) : ketika galeri_id tidak ditemukan
 
 ```json
 {
-  "message": "login gagal, cek email dan password"
+  "message": "Data tidak ditemukan"
+}
+```
+
+Response Body Error(409) : ketika nama sudah ada
+
+```json
+{
+  "message": "Nama sudah digunakan"
 }
 ```
 
@@ -137,57 +258,108 @@ Response Body Error(500) : jika ada salah kode php atau salah proses koneksi ke 
 }
 ```
 
-## Get Current User API
+## Merubah data file pada Galeri API spesifikasi
 
-Endpoint : GET /smkti/FE-BE-galeri/restapi/api/auth/current
+Endpoint :  POST /smkti/FE-BE-galeri/restapi/api/galeri/{{users_id}}/file
 
-Headers :
-- Authorization : Bearer {{token}}
+Bussiness Logic:
 
-Response Body Success(200): ketika token sesuai
+- cek request dari client
+- cari data berdasarkan table *galeri* kolom *id*
+- lakukan hapus file yang lama dan simpan file baru
+- simpan data
+- response data yang baru saja di simpan
+
+Request Body : format-data (multipart-form-data)
 
 ```json
 {
+  "file": (binary) // isRequired | string
+}
+```
+
+Response Body Success(200) : ketika request body sesuai
+
+```json
+{
+  "message": "Berhasil",
   "data": {
     "id": 1,
     "name": "Ronaldo",
-    "email": "ronaldo@gmail.com",
-    "file": null,
-    "created_at": "2024-01-17 13:58:07",
-    "updated_at": null,
-    "deleted_at": null
+    "file": "/galeri/3923sas-s2323.png",
+    "file_type": "png",
+    "file_size": 2000,
+    "tgl_buat": "2024-01-17 13:58:07",
+    "tgl_update": "2024-01-17 13:58:07",
+    "users_id": 1,
+    "users_name": "Ronaldo",
+    "users_level": "super admin"
   }
 }
 ```
 
-Response Body Error(400):
+Response Body Error(400) : ketika request tidak sesuai
 
 ```json
 {
-  "message": "Token telah kedaluwarsa"
+  "message": "Data tidak lengkap"
 }
 ```
 
-```json
-{
-    "message": "Token tidak valid"
-}
-```
+Response Body Error(404) : ketika galeri_id tidak ditemukan
 
 ```json
 {
-    "message": "Akses ditolak. Token tidak ditemukan."
+  "message": "Data tidak ditemukan"
 }
 ```
 
-```json
-{
-    "message": "users tidak ditemukan"
-}
-```
+Response Body Error(400) : ketika file tidak sesuai kriteria
 
 ```json
 {
-    "message": "Token tidak valid: ...."
+  "message": "File harus berupa: jpg,jpeg dan png"
+}
+```
+
+Response Body Error(500) : jika ada salah kode php atau salah proses koneksi ke database
+
+```json
+{
+  "message": "SQLSTATE[HY000] [1049] Unknown database 'bookshelf-acak'"
+}
+```
+
+## Menghapus data Galeri API spesifikasi
+
+Endpoint :  DELETE /smkti/FE-BE-galeri/restapi/api/galeri/{{galeri_id}}
+
+Bussiness Logic:
+
+- cek request dari client
+- cari data berdasarkan table *galeri* kolom *id*
+- hapus file yang ada di dalam folder galeri
+- response empty
+
+Request Body : -
+
+Response Body Success(200) : ketika request body sesuai *empty response*
+
+```json
+```
+
+Response Body Error(404) : ketika galeri_id tidak ditemukan
+
+```json
+{
+  "message": "Data tidak ditemukan"
+}
+```
+
+Response Body Error(500) : jika ada salah kode php atau salah proses koneksi ke database
+
+```json
+{
+  "message": "SQLSTATE[HY000] [1049] Unknown database 'bookshelf-acak'"
 }
 ```
