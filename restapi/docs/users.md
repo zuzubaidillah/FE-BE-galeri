@@ -22,12 +22,12 @@ Endpoint :  GET /smkti/FE-BE-galeri/restapi/api/users
 Bussiness Logic:
 
 - response data users secara keseluruhan
-- urutkan data berdasarkan *tgl_buat* desc
+- urutkan data berdasarkan **tgl_buat** **desc**
 
 Request params :
 
 ```text
-filter_q:"" // optional | akan mencari data users berdasarkan kolom [nama, email, no_telpon]
+filter_q: "" // optional | akan mencari data users berdasarkan kolom [nama, email, no_telpon]
 ```
 
 Response Body Success(200) : ketika request body sesuai
@@ -41,8 +41,15 @@ Response Body Success(200) : ketika request body sesuai
       "nama": "Ronaldo",
       "no_telpon": "6289676041493",
       "email": "ronaldo@gmail.com",
+      "level": "super admin"
+    },
+    {
+      "id": 2,
+      "nama": "Messi",
+      "no_telpon": "6289676041493",
+      "email": "messi@gmail.com",
       "level": "admin"
-    }
+    },
   ]
 }
 ```
@@ -57,13 +64,13 @@ Response Body Error(500) : jika ada salah kode php atau salah proses koneksi ke 
 
 ## Mengambil User berdasarkan id API spesifikasi
 
-Endpoint :  GET /smkti/FE-BE-galeri/restapi/api/users/{{users_id}}
+Endpoint :  GET /smkti/FE-BE-galeri/restapi/api/users/{{user_id}}
 
 Bussiness Logic:
 
 - cek request client
-- cari data berdasarkan table *users* kolom *id*
-- response data users berdasarkan params *users_id*
+- cari data user_id berdasarkan table **users** kolom **id**
+- response data **users** berdasarkan params **user_id**
 
 Response Body Success(200) : ketika request body sesuai
 
@@ -75,16 +82,16 @@ Response Body Success(200) : ketika request body sesuai
     "nama": "Ronaldo",
     "no_telpon": "6289676041493",
     "email": "ronaldo@gmail.com",
-    "level": "admin"
+    "level": "super admin"
   }
 }
 ```
 
-Response Body Error(404) : jika users_id yang dikirim tidak ditemukan
+Response Body Error(404) : jika user_id yang dikirim tidak ditemukan
 
 ```json
 {
-  "message": "Data tidak ditemukan"
+  "message": "Data 1 tidak ditemukan"
 }
 ```
 
@@ -172,18 +179,18 @@ Response Body Error(500) : jika ada salah kode php atau salah proses koneksi ke 
 
 ## Merubah data User API spesifikasi
 
-Endpoint :  PUT /smkti/FE-BE-galeri/restapi/api/users/{{users_id}}
+Endpoint :  PUT /smkti/FE-BE-galeri/restapi/api/users/{{user_id}}
 
 Bussiness Logic:
 
 - cek request dari client
-- cari data berdasarkan table *users* kolom *id*
-- cek nama yang sama, tambahkan logika tidak sama dengan users_id
-- cek email yang sama, tambahkan logika tidak sama dengan users_id
+- cari data berdasarkan table **users** kolom **id**
+- cek nama yang sama, tambahkan logika tidak sama dengan user_id
+- cek email yang sama, tambahkan logika tidak sama dengan user_id
 - sebelum menyimpan no telpon, pastikan diformat dengan 628 karena akan dimanfaatkan untuk kirim pesan whatsapp
 - password bersifat opsional, password jika dikirim maka diubah ke enkripsi sebelum disimpan
-- simpan data
-- response data yang baru saja di simpan
+- update data
+- response data yang baru saja di update
 
 Request Body :
 
@@ -220,11 +227,11 @@ Response Body Error(400) : ketika request tidak sesuai
 }
 ```
 
-Response Body Error(404) : ketika users_id tidak ditemukan
+Response Body Error(404) : ketika user_id tidak ditemukan
 
 ```json
 {
-  "message": "Data tidak ditemukan"
+  "message": "Data 1 tidak ditemukan"
 }
 ```
 
@@ -254,12 +261,12 @@ Response Body Error(500) : jika ada salah kode php atau salah proses koneksi ke 
 
 ## Menghapus data User API spesifikasi
 
-Endpoint :  DELETE /smkti/FE-BE-galeri/restapi/api/users/{{users_id}}
+Endpoint :  DELETE /smkti/FE-BE-galeri/restapi/api/users/{{user_id}}
 
 Bussiness Logic:
 
 - cek request dari client
-- cari data berdasarkan table *users* kolom *id*
+- cari data berdasarkan table **users** kolom **id**
 - response empty
 
 Request Body : -
@@ -269,11 +276,11 @@ Response Body Success(200) : ketika request body sesuai *empty response*
 ```json
 ```
 
-Response Body Error(404) : ketika users_id tidak ditemukan
+Response Body Error(404) : ketika user_id tidak ditemukan
 
 ```json
 {
-  "message": "Data tidak ditemukan"
+  "message": "Data 1 tidak ditemukan"
 }
 ```
 
