@@ -21,19 +21,16 @@ Endpoint :  GET /smkti/FE-BE-galeri/restapi/api/galeri
 
 Bussiness Logic:
 
-- response data galeri secara keseluruhan
+- response data galeri secara keseluruhan berdasarkan pengguna
 - client request params filter_q
-  - maka, saat mengambil data di table *galeri* tambahkan *where* pada kolom *nama* dan gunakan perintah *like*
-- client request params filter_users_id
-  - maka, saat mengambil data di table *galeri* tambahkan *where* pada kolom *users_id* dan gunakan perintah *=*
-- urutkan data berdasarkan *tgl_buat* desc
+  - maka, saat mengambil data di table **galeri** tambahkan **where** pada kolom **nama** dan gunakan perintah **like**
+- urutkan data berdasarkan **tgl_buat** desc
 
 Request params :
 
 ```json
 {
-  "filter_q": "", // optional | akan mencari data users berdasarkan kolom [nama]
-  "filter_users_id": 0 // optional
+  "filter_q": "", // optional | akan mencari data galeri berdasarkan kolom [nama]
 }
 ```
 
@@ -63,7 +60,7 @@ Response Body Error(500) : jika ada salah kode php atau salah proses koneksi ke 
 
 ```json
 {
-  "message": "SQLSTATE[HY000] [1049] Unknown database 'bookshelf-acak'"
+  "message": "SQLSTATE[HY000] [1049] Unknown database 'nama-database-salah'"
 }
 ```
 
@@ -73,9 +70,9 @@ Endpoint :  GET /smkti/FE-BE-galeri/restapi/api/galeri/{{galeri_id}}
 
 Bussiness Logic:
 
-- cek request client
-- cari data berdasarkan table *galeri* kolom *id*
-- response data users berdasarkan params *galeri_id*
+- cek request client, galeri_id
+- cari data berdasarkan table **galeri** kolom **id**
+- response data users berdasarkan params **galeri_id**
 
 Response Body Success(200) : ketika request body sesuai
 
@@ -97,11 +94,11 @@ Response Body Success(200) : ketika request body sesuai
 }
 ```
 
-Response Body Error(404) : jika galeri_id yang dikirim tidak ditemukan
+Response Body Error(404) : jika **galeri_id** yang dikirim tidak ditemukan pada **table galeri**
 
 ```json
 {
-  "message": "Data tidak ditemukan"
+  "message": "Data 1 tidak ditemukan"
 }
 ```
 
@@ -109,7 +106,7 @@ Response Body Error(500) : jika ada salah kode php atau salah proses koneksi ke 
 
 ```json
 {
-  "message": "SQLSTATE[HY000] [1049] Unknown database 'bookshelf-acak'"
+  "message": "SQLSTATE[HY000] [1049] Unknown database 'nama-database-salah'"
 }
 ```
 
@@ -119,6 +116,7 @@ Endpoint :  POST /smkti/FE-BE-galeri/restapi/api/galeri
 
 Bussiness Logic:
 
+- validasi request
 - cek nama yang sama
 - cek request file harus tipe: [png, jpg, jpeg]
 - simpan file kedalam folder galeri
@@ -174,7 +172,7 @@ Response Body Error(400) : ketika file tidak sesuai kriteria
 
 ```json
 {
-  "message": "File harus berupa: jpg,jpeg dan png"
+  "message": "File harus berupa: jpg, jpeg dan png"
 }
 ```
 
@@ -182,21 +180,21 @@ Response Body Error(500) : jika ada salah kode php atau salah proses koneksi ke 
 
 ```json
 {
-  "message": "SQLSTATE[HY000] [1049] Unknown database 'bookshelf-acak'"
+  "message": "SQLSTATE[HY000] [1049] Unknown database 'nama-database-salah'"
 }
 ```
 
 ## Merubah data Galeri API spesifikasi
 
-Endpoint :  PUT /smkti/FE-BE-galeri/restapi/api/galerigaleri_id}}
+Endpoint :  PUT /smkti/FE-BE-galeri/restapi/api/galeri/{{galeri_id}}
 
 Bussiness Logic:
 
 - cek request dari client
-- cari data berdasarkan table *galeri* kolom *id*
-- cek nama yang sama, tambahkan logika tidak sama dengan galeri_id
-- simpan data
-- response data yang baru saja di simpan
+- cari data berdasarkan param **galeri_id** pada table **galeri** kolom **id**
+- cek nama yang sama, tambahkan logika tidak sama dengan **galeri_id**
+- update data
+- response data yang baru saja di update
 
 Request Body :
 
@@ -238,7 +236,7 @@ Response Body Error(404) : ketika galeri_id tidak ditemukan
 
 ```json
 {
-  "message": "Data tidak ditemukan"
+  "message": "Data 1 tidak ditemukan"
 }
 ```
 
@@ -254,21 +252,21 @@ Response Body Error(500) : jika ada salah kode php atau salah proses koneksi ke 
 
 ```json
 {
-  "message": "SQLSTATE[HY000] [1049] Unknown database 'bookshelf-acak'"
+  "message": "SQLSTATE[HY000] [1049] Unknown database 'nama-database-salah'"
 }
 ```
 
 ## Merubah data file pada Galeri API spesifikasi
 
-Endpoint :  POST /smkti/FE-BE-galeri/restapi/api/galeri/{{users_id}}/file
+Endpoint :  POST /smkti/FE-BE-galeri/restapi/api/galeri/{{galeri_id}}/file
 
 Bussiness Logic:
 
 - cek request dari client
-- cari data berdasarkan table *galeri* kolom *id*
-- lakukan hapus file yang lama dan simpan file baru
-- simpan data
-- response data yang baru saja di simpan
+- cari data berdasarkan param **galeri_id** table **galeri** kolom **id**
+- lakukan hapus file yang lama dan simpan file baru kedalam folder yang ditentukan
+- update data
+- response data yang baru saja di update
 
 Request Body : format-data (multipart-form-data)
 
@@ -310,7 +308,7 @@ Response Body Error(404) : ketika galeri_id tidak ditemukan
 
 ```json
 {
-  "message": "Data tidak ditemukan"
+  "message": "Data 1 tidak ditemukan"
 }
 ```
 
@@ -326,7 +324,7 @@ Response Body Error(500) : jika ada salah kode php atau salah proses koneksi ke 
 
 ```json
 {
-  "message": "SQLSTATE[HY000] [1049] Unknown database 'bookshelf-acak'"
+  "message": "SQLSTATE[HY000] [1049] Unknown database 'nama-database-salah'"
 }
 ```
 
@@ -337,8 +335,9 @@ Endpoint :  DELETE /smkti/FE-BE-galeri/restapi/api/galeri/{{galeri_id}}
 Bussiness Logic:
 
 - cek request dari client
-- cari data berdasarkan table *galeri* kolom *id*
+- cari data **galeri_id** berdasarkan table **galeri** kolom **id**
 - hapus file yang ada di dalam folder galeri
+- hapus data pada table **galeri**
 - response empty
 
 Request Body : -
@@ -352,7 +351,7 @@ Response Body Error(404) : ketika galeri_id tidak ditemukan
 
 ```json
 {
-  "message": "Data tidak ditemukan"
+  "message": "Data 1 tidak ditemukan"
 }
 ```
 
@@ -360,6 +359,6 @@ Response Body Error(500) : jika ada salah kode php atau salah proses koneksi ke 
 
 ```json
 {
-  "message": "SQLSTATE[HY000] [1049] Unknown database 'bookshelf-acak'"
+  "message": "SQLSTATE[HY000] [1049] Unknown database 'nama-database-salah'"
 }
 ```

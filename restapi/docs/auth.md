@@ -78,7 +78,7 @@ Response Body Error(500) : jika ada salah kode php atau salah proses koneksi ke 
 
 ```json
 {
-  "message": "SQLSTATE[HY000] [1049] Unknown database 'bookshelf-acak'"
+  "message": "SQLSTATE[HY000] [1049] Unknown database 'nama-database-salah'"
 }
 ```
 
@@ -128,7 +128,7 @@ Response Body Error(500) : jika ada salah kode php atau salah proses koneksi ke 
 
 ```json
 {
-  "message": "SQLSTATE[HY000] [1049] Unknown database 'bookshelf-acak'"
+  "message": "SQLSTATE[HY000] [1049] Unknown database 'nama-database-salah'"
 }
 ```
 
