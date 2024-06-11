@@ -10,6 +10,8 @@ class Users
     private $table_name = "users";
     private $db;
 
+    public $result;
+
     public $id;
     public $name;
     public $email;
@@ -28,6 +30,21 @@ class Users
         return $this->db->resultSet();
     }
 
+    // fungsi ini akan mengembalikan single()
+    // single() jika ditemukan maka mengembalikan berbentuk array
+    // single() jika tidak ditemukan maka mengembalikan nilai false
+    public function findNama($nama) {
+        $query = "SELECT *
+        FROM users
+        WHERE nama = :nama";
+        $this->db->query($query);
+        $this->db->bind('nama', $nama);
+        return $this->db->single();
+    }
+
+    // fungsi ini akan mengembalikan single()
+    // single() jika ditemukan maka mengembalikan berbentuk array
+    // single() jika tidak ditemukan maka mengembalikan nilai false
     public function findEmail($email) {
         $query = "SELECT *
         FROM users
@@ -38,20 +55,23 @@ class Users
     }
 
     /**
-     * form_data [name,email,password(has)]
+     * form_data [nama, no_telpon, email, password(has), level]
      */
-    public function registrasi($form_data)
+    public function buat_data_baru($form_data)
     {
         try {
             $query = "INSERT INTO $this->table_name 
-            (name, email, password, created_at) 
-            VALUES (:name, :email, :password, :created_at)";
+            (name, no_telpon, email, password, level, tgl_buat, tgl_update) 
+            VALUES (:nama, :nomor, :email, :password, :level, :tgl_buat, :tgl_update)";
 
             $this->db->query($query);
-            $this->db->bind('name', $form_data['name']);
+            $this->db->bind('nama', $form_data['nama']);
+            $this->db->bind('nomor', $form_data['no_telpon']);
             $this->db->bind('email', $form_data['email']);
             $this->db->bind('password', $form_data['password']);
-            $this->db->bind('created_at', date("Y-m-d H:i:s"));
+            $this->db->bind('level', $form_data['level']);
+            $this->db->bind('tgl_buat', date("Y-m-d H:i:s"));
+            $this->db->bind('tgl_update', date("Y-m-d H:i:s"));
 
             $res = $this->db->execute();
             if ($res === true) {
@@ -59,7 +79,8 @@ class Users
                 // Mengambil data yang baru disimpan
                 $this->db->query("SELECT * FROM $this->table_name WHERE id = :id");
                 $this->db->bind('id', $users_id);
-                return $this->db->single();
+                $this->result = $this->db->single();
+                return true;
             } else {
                 return false;
             }

@@ -26,10 +26,8 @@ Bussiness Logic:
 
 Request params :
 
-```json
-{
-  "filter_q": "" // optional | akan mencari data users berdasarkan kolom [nama, email, no_telpon]
-}
+```text
+filter_q:"" // optional | akan mencari data users berdasarkan kolom [nama, email, no_telpon]
 ```
 
 Response Body Success(200) : ketika request body sesuai
@@ -104,6 +102,7 @@ Endpoint :  POST /smkti/FE-BE-galeri/restapi/api/users
 
 Bussiness Logic:
 
+- cek level yang boleh melakukan buat users adalah level super admin
 - cek nama yang sama
 - cek email yang sama
 - sebelum menyimpan no telpon, pastikan diformat dengan 628 karena akan dimanfaatkan untuk kirim pesan whatsapp
@@ -116,6 +115,7 @@ Request Body :
 ```json
 {
   "nama": "Ronaldo", // isRequired | string
+  "no_telpon": "089676041493", // isRequired | string
   "email": "ronaldo@gmail.com", // isRequired | string
   "password": "ronaldo", // isRequired | string
   "level": "admin" // isRequired | string

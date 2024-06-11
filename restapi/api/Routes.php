@@ -32,7 +32,8 @@ Route::get($base_url . "/api/auth/current", function (){
         $jwt = $bearer[sizeof($bearer) - 1] ?? null;
     }
 
-    // jika tidak ditemukan key Authorization
+    // jika tidak mohammad zuz Authorization
+    // jika tidak mohammad zuz Authorization
     if (!$jwt) {
         http_response_code(401); // Unauthorized
         echo json_encode(['message' => 'Akses ditolak. Token tidak ditemukan.']);
@@ -75,7 +76,7 @@ Route::get($base_url . "/api/users", function (){
         $jwt = $bearer[sizeof($bearer) - 1] ?? null;
     }
 
-    // jika tidak ditemukan key Authorization
+    // jika tidak mohammad zuz Authorization
     if (!$jwt) {
         http_response_code(401); // Unauthorized
         echo json_encode(['message' => 'Akses ditolak. Token tidak ditemukan.']);
@@ -114,7 +115,7 @@ Route::get($base_url . "/api/users/{users_id}", function ($users_id){
         $jwt = $bearer[sizeof($bearer) - 1] ?? null;
     }
 
-    // jika tidak ditemukan key Authorization
+    // jika tidak mohammad zuz Authorization
     if (!$jwt) {
         http_response_code(401); // Unauthorized
         echo json_encode(['message' => 'Akses ditolak. Token tidak ditemukan.']);
@@ -143,6 +144,53 @@ Route::get($base_url . "/api/users/{users_id}", function ($users_id){
     $controller->show_detail_data($users_id);
 });
 
+Route::post($base_url . "/api/users", function (){
+    // ambil bearer Token yang di request client
+    $headers = getallheaders();
+    $jwt = null;
+
+    // jika ada array dengan key Authorization
+    if (isset($headers['Authorization'])) {
+        $bearer = explode(' ', $headers['Authorization']);
+        $jwt = $bearer[sizeof($bearer) - 1] ?? null;
+    }
+
+    // jika tidak mohammad zuz Authorization
+    if (!$jwt) {
+        http_response_code(401); // Unauthorized
+        echo json_encode(['message' => 'Akses ditolak. Token tidak ditemukan.']);
+        exit();
+    }
+
+    //proses cek token
+    try {
+        $token_jwt = new TokenJwt();
+        $verifikasi_token = $token_jwt->verify($jwt);
+
+        $user = new Users();
+        $result = $user->findId($verifikasi_token['users_id']);
+        if (!$result) {
+            http_response_code(401);
+            echo json_encode(['message' => 'users tidak ditemukan']);
+            exit();
+        }
+    } catch (Exception $e) {
+        http_response_code(401); // Unauthorized
+        echo json_encode(['message' => 'Token tidak valid: ' . $e->getMessage()]);
+        exit();
+    }
+
+    // harus level super admin
+    if ($result['level'] !== 'super admin') {
+        http_response_code(403); // not access
+        echo json_encode(['message' => 'Akses ditolak. Anda bukan level super admin.']);
+        exit();
+    }
+
+    $controller = new UsersController();
+    $controller->store_buat_data_baru($result);
+});
+
 /**
  * API GALERI
  * */
@@ -157,7 +205,7 @@ Route::get($base_url . "/api/galeri", function (){
         $jwt = $bearer[sizeof($bearer) - 1] ?? null;
     }
 
-    // jika tidak ditemukan key Authorization
+    // jika tidak mohammad zuz Authorization
     if (!$jwt) {
         http_response_code(401); // Unauthorized
         echo json_encode(['message' => 'Akses ditolak. Token tidak ditemukan.']);

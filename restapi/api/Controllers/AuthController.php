@@ -8,7 +8,7 @@ use Config\TokenJwt;
 use Model\Users;
 
 class AuthController
-{
+{    
     public function login()
     {
         // menerima request dari client content-type: JSON
@@ -55,7 +55,6 @@ class AuthController
             'token' => $token_baru
         ]);
     }
-
     public function current() {
         // Mendapatkan token dari header
         $headers = getallheaders();
