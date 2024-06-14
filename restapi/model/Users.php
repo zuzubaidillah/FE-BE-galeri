@@ -12,17 +12,13 @@ class Users
 
     public $result;
 
-    public $id;
-    public $name;
-    public $email;
-    public $password;
-
     public function __construct()
     {
         $this->db = new Database();
     }
 
-    public function allData() {
+    public function allData()
+    {
         $query = "SELECT id, nama, email, level, tgl_buat, tgl_update
         FROM users
         ORDER BY tgl_buat DESC";
@@ -33,7 +29,8 @@ class Users
     // fungsi ini akan mengembalikan single()
     // single() jika ditemukan maka mengembalikan berbentuk array
     // single() jika tidak ditemukan maka mengembalikan nilai false
-    public function findNama($nama) {
+    public function findNama($nama)
+    {
         $query = "SELECT *
         FROM users
         WHERE nama = :nama";
@@ -42,15 +39,45 @@ class Users
         return $this->db->single();
     }
 
+    // fungsi ini berfungsi sebagai mencari nama dengan id
     // fungsi ini akan mengembalikan single()
     // single() jika ditemukan maka mengembalikan berbentuk array
     // single() jika tidak ditemukan maka mengembalikan nilai false
-    public function findEmail($email) {
+    public function findNamaWithId($id, $nama)
+    {
+        $query = "SELECT *
+        FROM users
+        WHERE nama = :nama AND id != :id";
+        $this->db->query($query);
+        $this->db->bind('nama', $nama);
+        $this->db->bind('id', $id);
+        return $this->db->single();
+    }
+
+    // fungsi ini akan mengembalikan single()
+    // single() jika ditemukan maka mengembalikan berbentuk array
+    // single() jika tidak ditemukan maka mengembalikan nilai false
+    public function findEmail($email)
+    {
         $query = "SELECT *
         FROM users
         WHERE email = :email";
         $this->db->query($query);
         $this->db->bind('email', $email);
+        return $this->db->single();
+    }
+
+    // fungsi ini akan mengembalikan single()
+    // single() jika ditemukan maka mengembalikan berbentuk array
+    // single() jika tidak ditemukan maka mengembalikan nilai false
+    public function findEmailWithId($id, $email)
+    {
+        $query = "SELECT *
+        FROM users
+        WHERE email = :email AND id != :id";
+        $this->db->query($query);
+        $this->db->bind('email', $email);
+        $this->db->bind('id', $id);
         return $this->db->single();
     }
 
@@ -61,7 +88,7 @@ class Users
     {
         try {
             $query = "INSERT INTO $this->table_name 
-            (name, no_telpon, email, password, level, tgl_buat, tgl_update) 
+            (nama, no_telpon, email, password, level, tgl_buat, tgl_update) 
             VALUES (:nama, :nomor, :email, :password, :level, :tgl_buat, :tgl_update)";
 
             $this->db->query($query);
@@ -89,6 +116,57 @@ class Users
         }
     }
 
+    /**
+     * form_data [nama, no_telpon, email, password(has) optional, level]
+     */
+    public function merubah_data($id, $form_data)
+    {
+        try {
+            // Membuat query untuk update data
+            $query = "UPDATE $this->table_name 
+                  SET nama = :nama, 
+                      no_telpon = :nomor, 
+                      email = :email, 
+                      level = :level, 
+                      tgl_update = :tgl_update ";
+
+            // Memeriksa apakah password disediakan dalam form_data
+            if (isset($form_data['password'])) {
+                $query .= ", password = :password ";
+            }
+
+            $query .= " WHERE id = :id";
+
+            $this->db->query($query);
+            $this->db->bind('nama', $form_data['nama']);
+            $this->db->bind('nomor', $form_data['no_telpon']);
+            $this->db->bind('email', $form_data['email']);
+
+            // Memeriksa apakah password disediakan dalam form_data
+            if (isset($form_data['password'])) {
+                $this->db->bind('password', $form_data['password']);
+            }
+
+            $this->db->bind('level', $form_data['level']);
+            $this->db->bind('id', $id);
+            $this->db->bind('tgl_update', date("Y-m-d H:i:s"));
+
+            // metode execute, akan mengirikan nilai antara true dan false
+            $res = $this->db->execute();
+            if ($res === true) {
+                // Mengambil data yang baru diupdate
+                $this->db->query("SELECT * FROM $this->table_name WHERE id = :id");
+                $this->db->bind('id', $id);
+                $this->result = $this->db->single();
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $exception) {
+            return $exception;
+        }
+    }
+
     public function findId($users_id)
     {
         $query = "SELECT id, nama, email, level, tgl_buat, tgl_update 
@@ -96,6 +174,21 @@ class Users
         $this->db->query($query);
         $this->db->bind('id', $users_id);
         return $this->db->single();
+    }
+
+    public function menghapus_data($users_id)
+    {
+        // kita buat blok try catch, untuk mengantisipasi ketika ada error pada waktu proses query databaase
+        // ketika ada error blok catch akan dijalankan
+        try {
+            $query = "DELETE 
+            FROM users WHERE id=:id";
+            $this->db->query($query);
+            $this->db->bind('id', $users_id);
+            return $this->db->execute();
+        } catch (PDOException $exception) {
+            return $exception;
+        }
     }
 }
 

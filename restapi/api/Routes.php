@@ -45,8 +45,8 @@ Route::get($base_url . "/api/auth/current", function (){
         $token_jwt = new TokenJwt();
         $verifikasi_token = $token_jwt->verify($jwt);
 
-        $user = new Users();
-        $result = $user->findId($verifikasi_token['users_id']);
+        $model_user = new Users();
+        $result = $model_user->findId($verifikasi_token['users_id']);
         if (!$result) {
             http_response_code(401);
             echo json_encode(['message' => 'users tidak ditemukan']);
@@ -88,8 +88,8 @@ Route::get($base_url . "/api/users", function (){
         $token_jwt = new TokenJwt();
         $verifikasi_token = $token_jwt->verify($jwt);
 
-        $user = new Users();
-        $result = $user->findId($verifikasi_token['users_id']);
+        $model_user = new Users();
+        $result = $model_user->findId($verifikasi_token['users_id']);
         if (!$result) {
             http_response_code(401);
             echo json_encode(['message' => 'users tidak ditemukan']);
@@ -104,7 +104,8 @@ Route::get($base_url . "/api/users", function (){
     $controller = new UsersController();
     $controller->index_ambil_data();
 });
-Route::get($base_url . "/api/users/{users_id}", function ($users_id){
+
+Route::get($base_url . "/api/users/{users_id}", function ($model_users_id){
     // ambil bearer Token yang di request client
     $headers = getallheaders();
     $jwt = null;
@@ -127,8 +128,8 @@ Route::get($base_url . "/api/users/{users_id}", function ($users_id){
         $token_jwt = new TokenJwt();
         $verifikasi_token = $token_jwt->verify($jwt);
 
-        $user = new Users();
-        $result = $user->findId($verifikasi_token['users_id']);
+        $model_user = new Users();
+        $result = $model_user->findId($verifikasi_token['users_id']);
         if (!$result) {
             http_response_code(401);
             echo json_encode(['message' => 'users tidak ditemukan']);
@@ -141,7 +142,7 @@ Route::get($base_url . "/api/users/{users_id}", function ($users_id){
     }
 
     $controller = new UsersController();
-    $controller->show_detail_data($users_id);
+    $controller->show_detail_data($model_users_id);
 });
 
 Route::post($base_url . "/api/users", function (){
@@ -167,8 +168,8 @@ Route::post($base_url . "/api/users", function (){
         $token_jwt = new TokenJwt();
         $verifikasi_token = $token_jwt->verify($jwt);
 
-        $user = new Users();
-        $result = $user->findId($verifikasi_token['users_id']);
+        $model_user = new Users();
+        $result = $model_user->findId($verifikasi_token['users_id']);
         if (!$result) {
             http_response_code(401);
             echo json_encode(['message' => 'users tidak ditemukan']);
@@ -189,6 +190,100 @@ Route::post($base_url . "/api/users", function (){
 
     $controller = new UsersController();
     $controller->store_buat_data_baru($result);
+});
+
+Route::put($base_url . "/api/users/{users_id}", function ($param_users_id){
+    // ambil bearer Token yang di request client
+    $headers = getallheaders();
+    $jwt = null;
+
+    // jika ada array dengan key Authorization
+    if (isset($headers['Authorization'])) {
+        $bearer = explode(' ', $headers['Authorization']);
+        $jwt = $bearer[sizeof($bearer) - 1] ?? null;
+    }
+
+    // jika tidak mohammad zuz Authorization
+    if (!$jwt) {
+        http_response_code(401); // Unauthorized
+        echo json_encode(['message' => 'Akses ditolak. Token tidak ditemukan.']);
+        exit();
+    }
+
+    //proses cek token
+    try {
+        $token_jwt = new TokenJwt();
+        $verifikasi_token = $token_jwt->verify($jwt);
+
+        $model_user = new Users();
+        $current_user = $model_user->findId($verifikasi_token['users_id']);
+        if (!$current_user) {
+            http_response_code(401);
+            echo json_encode(['message' => 'users tidak ditemukan']);
+            exit();
+        }
+    } catch (Exception $e) {
+        http_response_code(401); // Unauthorized
+        echo json_encode(['message' => 'Token tidak valid: ' . $e->getMessage()]);
+        exit();
+    }
+
+    // harus level super admin
+    if ($current_user['level'] !== 'super admin') {
+        http_response_code(403); // not access
+        echo json_encode(['message' => 'Akses ditolak. Anda bukan level super admin.']);
+        exit();
+    }
+
+    $controller = new UsersController();
+    $controller->update_merubah_data($param_users_id, $current_user);
+});
+
+Route::delete($base_url . "/api/users/{users_id}", function ($param_users_id){
+    // ambil bearer Token yang di request client
+    $headers = getallheaders();
+    $jwt = null;
+
+    // jika ada array dengan key Authorization
+    if (isset($headers['Authorization'])) {
+        $bearer = explode(' ', $headers['Authorization']);
+        $jwt = $bearer[sizeof($bearer) - 1] ?? null;
+    }
+
+    // jika tidak mohammad zuz Authorization
+    if (!$jwt) {
+        http_response_code(401); // Unauthorized
+        echo json_encode(['message' => 'Akses ditolak. Token tidak ditemukan.']);
+        exit();
+    }
+
+    //proses cek token
+    try {
+        $token_jwt = new TokenJwt();
+        $verifikasi_token = $token_jwt->verify($jwt);
+
+        $model_user = new Users();
+        $current_user = $model_user->findId($verifikasi_token['users_id']);
+        if (!$current_user) {
+            http_response_code(401);
+            echo json_encode(['message' => 'users tidak ditemukan']);
+            exit();
+        }
+    } catch (Exception $e) {
+        http_response_code(401); // Unauthorized
+        echo json_encode(['message' => 'Token tidak valid: ' . $e->getMessage()]);
+        exit();
+    }
+
+    // harus level super admin
+    if ($current_user['level'] !== 'super admin') {
+        http_response_code(403); // not access
+        echo json_encode(['message' => 'Akses ditolak. Anda bukan level super admin.']);
+        exit();
+    }
+
+    $controller = new UsersController();
+    $controller->delete_menghapus_data($param_users_id, $current_user);
 });
 
 /**
@@ -217,8 +312,8 @@ Route::get($base_url . "/api/galeri", function (){
         $token_jwt = new TokenJwt();
         $verifikasi_token = $token_jwt->verify($jwt);
 
-        $user = new Users();
-        $result = $user->findId($verifikasi_token['users_id']);
+        $model_user = new Users();
+        $result = $model_user->findId($verifikasi_token['users_id']);
         if (!$result) {
             http_response_code(401);
             echo json_encode(['message' => 'users tidak ditemukan']);

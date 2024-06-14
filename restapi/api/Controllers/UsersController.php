@@ -20,7 +20,8 @@ class UsersController
         $result = $user->findId($users_id);
         if ($result === false) {
             http_response_code(404);
-            echo json_encode(['message' => 'Data tidak ditemukan']);
+            //echo json_encode(['message' => 'Data '.$users_id.' tidak ditemukan']);
+            echo json_encode(['message' => "Data $users_id tidak ditemukan"]);
             exit();
         }
         echo json_encode(['data' => $result]);
@@ -88,5 +89,99 @@ class UsersController
             'message' => 'berhasil',
             'data' => $user->result
         ]);
+    }
+
+    public function update_merubah_data($param_users_id, $current_users) {
+        // menerima request dari client content-type: JSON
+        $request = json_decode(file_get_contents('php://input'), true);
+
+        // cel validasi request dari client
+        // empty() adalah melakukan pendeteksi terhadap nilai yang dikirim apakah bernilai empty/kosong
+        if (empty($request['nama']) || empty($request['no_telpon']) || empty($request['level']) || empty($request['email'])) {
+            http_response_code(400);
+            echo json_encode(['message' => 'Data tidak lengkap']);
+            exit();
+        }
+
+        // jika password dikirim
+        if (isset($request['password']) && empty($request['password'])) {
+            http_response_code(400);
+            echo json_encode(['message' => 'Data tidak lengkap']);
+            exit();
+        }
+
+        $model_user = new Users();
+
+        // cek params users_id yang akan diupdate datanya
+        $cek_id = $model_user->findId($param_users_id);
+        if ($cek_id == false) {
+            http_response_code(404);
+            echo json_encode(['message' => "Data $param_users_id tidak ditemukan"]);
+            exit();
+        }
+
+        // cek nama yang sama
+        $cek_nama_sama = $model_user->findNamaWithId($param_users_id, $request['nama']);
+        if ($cek_nama_sama !== false) {
+            http_response_code(400);
+            echo json_encode(['message' => 'Nama sudah digunakan']);
+            exit();
+        }
+
+        // cek email yang sama
+        $cek_email_sama = $model_user->findEmailWithId($param_users_id, $request['email']);
+        if ($cek_email_sama !== false) {
+            http_response_code(400);
+            echo json_encode(['message' => 'Email sudah digunakan']);
+            exit();
+        }
+
+        $format_no_telpon = $this->format_nomor($request['no_telpon']);
+        $form_data = [
+            'nama' => $request['nama'],
+            'no_telpon' => $format_no_telpon,
+            'email' => $request['email'],
+            'level' => $request['level'],
+        ];
+        // jika password dikirim
+        if (isset($request['password'])) {
+            $form_data['password'] = password_hash($request['password'], PASSWORD_DEFAULT);
+        }
+
+        $result = $model_user->merubah_data($param_users_id, $form_data);
+        if ($result === false) {
+            http_response_code(404);
+            echo json_encode(['message' => 'Proses update data gagal']);
+            exit();
+        }
+
+        http_response_code(200);
+        echo json_encode([
+            'message' => 'berhasil',
+            'data' => $model_user->result
+        ]);
+    }
+
+    public function delete_menghapus_data($param_users_id, $current_users) {
+
+        $model_user = new Users();
+
+        // cek params users_id yang akan dihapus datanya
+        $cek_id = $model_user->findId($param_users_id);
+        if ($cek_id == false) {
+            http_response_code(404);
+            echo json_encode(['message' => "Data $param_users_id tidak ditemukan"]);
+            exit();
+        }
+
+        $result = $model_user->menghapus_data($param_users_id);
+        if ($result === false) {
+            http_response_code(404);
+            echo json_encode(['message' => 'Proses menghapus data gagal']);
+            exit();
+        }
+
+        http_response_code(200);
+        echo "";
     }
 }
