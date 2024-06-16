@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../config/Route.php';
 require_once __DIR__ . '/Controllers/AuthController.php';
 require_once __DIR__ . '/Controllers/UsersController.php';
+require_once __DIR__ . '/Controllers/GaleriController.php';
 require_once __DIR__ . '/../config/TokenJwt.php';
 require_once __DIR__ . '/../model/Users.php';
 
@@ -10,6 +11,7 @@ use Config\Route;
 use Config\TokenJwt;
 use Controllers\AuthController;
 use Controllers\UsersController;
+use Controllers\GaleriController;
 use Model\Users;
 
 $base_url = "/smkti/FE-BE-galeri/restapi";
@@ -325,8 +327,208 @@ Route::get($base_url . "/api/galeri", function (){
         exit();
     }
 
-    $controller = new AuthController();
-    $controller->current();
+    $controller = new GaleriController();
+    $controller->index_ambil_data($verifikasi_token['users_id']);
+});
+
+Route::post($base_url . "/api/galeri", function (){
+    // ambil bearer Token yang di request client
+    $headers = getallheaders();
+    $jwt = null;
+
+    // jika ada array dengan key Authorization
+    if (isset($headers['Authorization'])) {
+        $bearer = explode(' ', $headers['Authorization']);
+        $jwt = $bearer[sizeof($bearer) - 1] ?? null;
+    }
+
+    // jika tidak mohammad zuz Authorization
+    if (!$jwt) {
+        http_response_code(401); // Unauthorized
+        echo json_encode(['message' => 'Akses ditolak. Token tidak ditemukan.']);
+        exit();
+    }
+
+    //proses cek token
+    try {
+        $token_jwt = new TokenJwt();
+        $verifikasi_token = $token_jwt->verify($jwt);
+
+        $model_user = new Users();
+        $result = $model_user->findId($verifikasi_token['users_id']);
+        if (!$result) {
+            http_response_code(401);
+            echo json_encode(['message' => 'users tidak ditemukan']);
+            exit();
+        }
+    } catch (Exception $e) {
+        http_response_code(401); // Unauthorized
+        echo json_encode(['message' => 'Token tidak valid: ' . $e->getMessage()]);
+        exit();
+    }
+
+    $controller = new GaleriController();
+    $controller->store_buat_data_baru($verifikasi_token['users_id']);
+});
+
+Route::get($base_url . "/api/galeri/{galeri_id}", function ($galeri_id){
+    // ambil bearer Token yang di request client
+    $headers = getallheaders();
+    $jwt = null;
+
+    // jika ada array dengan key Authorization
+    if (isset($headers['Authorization'])) {
+        $bearer = explode(' ', $headers['Authorization']);
+        $jwt = $bearer[sizeof($bearer) - 1] ?? null;
+    }
+
+    // jika tidak mohammad zuz Authorization
+    if (!$jwt) {
+        http_response_code(401); // Unauthorized
+        echo json_encode(['message' => 'Akses ditolak. Token tidak ditemukan.']);
+        exit();
+    }
+
+    //proses cek token
+    try {
+        $token_jwt = new TokenJwt();
+        $verifikasi_token = $token_jwt->verify($jwt);
+
+        $model_user = new Users();
+        $result = $model_user->findId($verifikasi_token['users_id']);
+        if (!$result) {
+            http_response_code(401);
+            echo json_encode(['message' => 'users tidak ditemukan']);
+            exit();
+        }
+    } catch (Exception $e) {
+        http_response_code(401); // Unauthorized
+        echo json_encode(['message' => 'Token tidak valid: ' . $e->getMessage()]);
+        exit();
+    }
+
+    $controller = new GaleriController();
+    $controller->show_detail_data($galeri_id, $verifikasi_token['users_id']);
+});
+
+Route::put($base_url . "/api/galeri/{galeri_id}", function ($galeri_id){
+    // ambil bearer Token yang di request client
+    $headers = getallheaders();
+    $jwt = null;
+
+    // jika ada array dengan key Authorization
+    if (isset($headers['Authorization'])) {
+        $bearer = explode(' ', $headers['Authorization']);
+        $jwt = $bearer[sizeof($bearer) - 1] ?? null;
+    }
+
+    // jika tidak mohammad zuz Authorization
+    if (!$jwt) {
+        http_response_code(401); // Unauthorized
+        echo json_encode(['message' => 'Akses ditolak. Token tidak ditemukan.']);
+        exit();
+    }
+
+    //proses cek token
+    try {
+        $token_jwt = new TokenJwt();
+        $verifikasi_token = $token_jwt->verify($jwt);
+
+        $model_user = new Users();
+        $result = $model_user->findId($verifikasi_token['users_id']);
+        if (!$result) {
+            http_response_code(401);
+            echo json_encode(['message' => 'users tidak ditemukan']);
+            exit();
+        }
+    } catch (Exception $e) {
+        http_response_code(401); // Unauthorized
+        echo json_encode(['message' => 'Token tidak valid: ' . $e->getMessage()]);
+        exit();
+    }
+
+    $controller = new GaleriController();
+    $controller->update_merubah_data($galeri_id, $verifikasi_token['users_id']);
+});
+
+Route::post($base_url . "/api/galeri/{galeri_id}/image", function ($galeri_id){
+    // ambil bearer Token yang di request client
+    $headers = getallheaders();
+    $jwt = null;
+
+    // jika ada array dengan key Authorization
+    if (isset($headers['Authorization'])) {
+        $bearer = explode(' ', $headers['Authorization']);
+        $jwt = $bearer[sizeof($bearer) - 1] ?? null;
+    }
+
+    // jika tidak mohammad zuz Authorization
+    if (!$jwt) {
+        http_response_code(401); // Unauthorized
+        echo json_encode(['message' => 'Akses ditolak. Token tidak ditemukan.']);
+        exit();
+    }
+
+    //proses cek token
+    try {
+        $token_jwt = new TokenJwt();
+        $verifikasi_token = $token_jwt->verify($jwt);
+
+        $model_user = new Users();
+        $result = $model_user->findId($verifikasi_token['users_id']);
+        if (!$result) {
+            http_response_code(401);
+            echo json_encode(['message' => 'users tidak ditemukan']);
+            exit();
+        }
+    } catch (Exception $e) {
+        http_response_code(401); // Unauthorized
+        echo json_encode(['message' => 'Token tidak valid: ' . $e->getMessage()]);
+        exit();
+    }
+
+    $controller = new GaleriController();
+    $controller->update_image($galeri_id, $verifikasi_token['users_id']);
+});
+
+Route::delete($base_url . "/api/galeri/{galeri_id}", function ($galeri_id){
+    // ambil bearer Token yang di request client
+    $headers = getallheaders();
+    $jwt = null;
+
+    // jika ada array dengan key Authorization
+    if (isset($headers['Authorization'])) {
+        $bearer = explode(' ', $headers['Authorization']);
+        $jwt = $bearer[sizeof($bearer) - 1] ?? null;
+    }
+
+    // jika tidak mohammad zuz Authorization
+    if (!$jwt) {
+        http_response_code(401); // Unauthorized
+        echo json_encode(['message' => 'Akses ditolak. Token tidak ditemukan.']);
+        exit();
+    }
+
+    //proses cek token
+    try {
+        $token_jwt = new TokenJwt();
+        $verifikasi_token = $token_jwt->verify($jwt);
+
+        $model_user = new Users();
+        $result = $model_user->findId($verifikasi_token['users_id']);
+        if (!$result) {
+            http_response_code(401);
+            echo json_encode(['message' => 'users tidak ditemukan']);
+            exit();
+        }
+    } catch (Exception $e) {
+        http_response_code(401); // Unauthorized
+        echo json_encode(['message' => 'Token tidak valid: ' . $e->getMessage()]);
+        exit();
+    }
+
+    $controller = new GaleriController();
+    $controller->delete_menghapus_data($galeri_id, $verifikasi_token['users_id']);
 });
 
 

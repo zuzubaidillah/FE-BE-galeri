@@ -128,7 +128,7 @@ Request Body form-data : gunakan (multipart-form-data)
 ```json
 {
   "nama": "Ronaldo", // isRequired | string
-  "file": (binary) // isRequired | string
+  "image": (binary) // isRequired | string
 }
 ```
 
@@ -173,6 +173,14 @@ Response Body Error(400) : ketika file tidak sesuai kriteria
 ```json
 {
   "message": "File harus berupa: jpg, jpeg dan png"
+}
+```
+
+Response Body Error(400) : ketika file melebihi 2mb
+
+```json
+{
+  "message": "Ukuran file terlalu besar. Maksimal 2MB."
 }
 ```
 
@@ -258,7 +266,7 @@ Response Body Error(500) : jika ada salah kode php atau salah proses koneksi ke 
 
 ## Merubah data file pada Galeri API spesifikasi
 
-Endpoint :  POST /smkti/FE-BE-galeri/restapi/api/galeri/{{galeri_id}}/file
+Endpoint :  POST /smkti/FE-BE-galeri/restapi/api/galeri/{{galeri_id}}/image
 
 Bussiness Logic:
 
@@ -272,7 +280,7 @@ Request Body : format-data (multipart-form-data)
 
 ```json
 {
-  "file": (binary) // isRequired | string
+  "image": (binary) // isRequired | string
 }
 ```
 
