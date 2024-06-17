@@ -18,9 +18,21 @@ class GaleriController
         if (isset($_GET['filter_q'])) {
             $filter_q = $_GET['filter_q'];
         }
+
         $user = new Galeri();
         $result = $user->dataSesuaiUsersId($current_users_id, $filter_q);
-        echo json_encode(['data' => $result]);
+
+        // Tambahkan domain REST API
+        $domain = 'http://localhost/smkti/FE-BE-galeri/restapi'; // Ubah ini sesuai dengan domain REST API Anda
+
+        // Bangun array baru dengan URL lengkap untuk file
+        $response = [];
+        foreach ($result as $item) {
+            $item['file'] = $domain . '/' . $item['file'];
+            $response[] = $item;
+        }
+
+        echo json_encode(['data' => $response]);
     }
 
     public function store_buat_data_baru($current_users_id)
@@ -265,8 +277,7 @@ class GaleriController
 
         try {
             // Upload file ke direktori tujuan
-            if (move_uploaded_file($_FILES["image"]["tmp_name"], $kombinasi_target_file_name))
-            {
+            if (move_uploaded_file($_FILES["image"]["tmp_name"], $kombinasi_target_file_name)) {
                 $form_data = [
                     "file" => $kombinasi_target_file_name,
                     "file_name" => $_FILES["image"]["tmp_name"],
@@ -283,8 +294,7 @@ class GaleriController
                 http_response_code(200);
                 echo json_encode($data);
                 exit();
-            }
-            else {
+            } else {
                 $data = [
                     'message' => 'Maaf, terjadi kesalahan saat mengupload file.'
                 ];
