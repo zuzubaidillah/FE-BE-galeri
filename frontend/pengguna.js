@@ -23,7 +23,12 @@ async function deleteUser(users_id) {
 		return; // Jika pengguna membatalkan, hentikan eksekusi fungsi
 	}
 
+	// Tampilkan modal preloading
+	const preloadingModal = document.getElementById("preloading-modal");
+	preloadingModal.style.display = "block";
+
 	try {
+
 		const response = await fetch(`http://localhost/smkti/FE-BE-galeri/restapi/api/users/${users_id}`, {
 			method: "DELETE",
 			headers: {
@@ -34,6 +39,14 @@ async function deleteUser(users_id) {
 
 		if (!response.ok) {
 			const errorData = await response.json();
+
+			// jika token telah kadalwarsa
+			if (response.status === 401) {
+				localStorage.clear()
+				alert(errorData.message)
+				window.location.href = "/index.html";
+			}
+
 			throw new Error(errorData.message);
 		}
 
@@ -41,6 +54,9 @@ async function deleteUser(users_id) {
 	} catch (error) {
 		console.error("Error:", error);
 		alert(error.message);
+	} finally {
+		// Sembunyikan modal preloading
+		preloadingModal.style.display = 'none';
 	}
 }
 
@@ -63,8 +79,16 @@ async function getUsers() {
 		});
 
 		if (!response.ok) {
-			const errorData = await response.json();
 			isLoading = false;
+			const errorData = await response.json();
+
+			// jika token telah kadalwarsa
+			if (response.status === 401) {
+				localStorage.clear()
+				alert(errorData.message)
+				window.location.href = "/index.html";
+			}
+
 			tbody.innerHTML = "";
 			tr.innerHTML = `<td colspan="6">${errorData.message}</td>`;
 			tbody.appendChild(tr);

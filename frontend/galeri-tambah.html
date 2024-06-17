@@ -3,12 +3,12 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Tambah Pengguna</title>
+	<title>Tambah Galeri</title>
 	<link rel="stylesheet" href="style-dashboard.css">
 </head>
 <body class="datases">
 <div class="dashboard-container">
-	<h2>Halaman Pengguna</h2>
+	<h2>Halaman Galeri</h2>
 	<p>Hallo <span id="usersName"></span> Anda berhasil login!</p>
 	<p>Level: <span id="usersLevel"></span></p>
 
@@ -22,7 +22,7 @@
 
 <main id="pengguna" class="dashboard-container">
 	<div class="header-title">
-		<h2>Tambah Pengguna</h2>
+		<h2>Tambah Galeri</h2>
 		<div class="blok-btn">
 		</div>
 	</div>
@@ -31,24 +31,9 @@
 			Nama
 			<input required type="text" name="nama" id="nama">
 		</label>
-		<label for="no_telpon">
-			No Telpon
-			<input required type="text" name="no_telpon" id="no_telpon">
-		</label>
-		<label for="email">
-			Email
-			<input required type="email" name="email" id="email">
-		</label>
-		<label for="password">
-			Password
-			<input required type="password" name="password" id="password">
-		</label>
-		<label for="level">
-			Level
-			<select id="level">
-				<option value="super admin">super admin</option>
-				<option value="admin">admin</option>
-			</select>
+		<label for="image">
+			Gambar
+			<input required type="file" accept="image/*" name="image" id="image">
 		</label>
 		<button type="submit" class="btn">Simpan</button>
 		<div id="message"></div> <!-- Elemen pesan -->
@@ -56,6 +41,6 @@
 </main>
 
 <script defer type="text/javascript" src="/adminpanel.js"></script>
-<script defer type="text/javascript" src="/pengguna-tambah.js"></script>
+<script defer type="text/javascript" src="/galeri-tambah.js"></script>
 </body>
 </html>
