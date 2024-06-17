@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Tambah Pengguna</title>
+	<title>Edit Pengguna</title>
 	<link rel="stylesheet" href="style-dashboard.css">
 </head>
 <body class="datases">
@@ -22,7 +22,7 @@
 
 <main id="pengguna" class="dashboard-container">
 	<div class="header-title">
-		<h2>Tambah Pengguna</h2>
+		<h2>Edit Pengguna</h2>
 		<div class="blok-btn">
 		</div>
 	</div>
@@ -41,7 +41,7 @@
 		</label>
 		<label for="password">
 			Password
-			<input required type="password" name="password" id="password">
+			<input type="password" name="password" id="password">
 		</label>
 		<label for="level">
 			Level
@@ -50,12 +50,12 @@
 				<option value="admin">admin</option>
 			</select>
 		</label>
-		<button type="submit" class="btn">Simpan</button>
+		<button type="submit" class="btn">Update</button>
 		<div id="message"></div> <!-- Elemen pesan -->
 	</form>
 </main>
 
 <script defer type="text/javascript" src="/adminpanel.js"></script>
-<script defer type="text/javascript" src="/pengguna-tambah.js"></script>
+<script defer type="text/javascript" src="/pengguna-edit.js"></script>
 </body>
 </html>

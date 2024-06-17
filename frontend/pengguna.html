@@ -3,22 +3,49 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Dashboard</title>
+	<title>Pengguna</title>
 	<link rel="stylesheet" href="style-dashboard.css">
 </head>
-<body>
+<body class="datases">
 <div class="dashboard-container">
 	<h2>Halaman Pengguna</h2>
 	<p>Hallo <span id="usersName"></span> Anda berhasil login!</p>
 	<p>Level: <span id="usersLevel"></span></p>
 
-	<div class="ul">
+	<div class="ul" style="flex-direction: row; gap: 1px">
 		<a href="/dashboard.html" class="menu-item">Dashboard</a>
 		<a href="/galeri.html" class="menu-item">Galeri</a>
 		<a href="/pengguna.html" class="menu-item">Pengguna</a>
 		<a href="javascript:void(0)" class="menu-item" id="menu-logout">LogOut</a>
 	</div>
 </div>
+
+<main id="pengguna" class="main-container">
+	<div class="header-title">
+		<h2>Data Pengguna</h2>
+		<div class="blok-btn">
+			<a href="pengguna-tambah.html" id="btn-tambah">Tambah</a>
+			<a href="javascript:void(0)" id="btn-refresh">Refresh</a>
+		</div>
+	</div>
+	<div>
+		<table class="table">
+			<thead>
+			<tr>
+				<th>NO</th>
+				<th>Nama</th>
+				<th>Telpon</th>
+				<th>Email</th>
+				<th>Level</th>
+				<th>Aksi</th>
+			</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</main>
+
 <script defer type="text/javascript" src="/adminpanel.js"></script>
 <script defer type="text/javascript" src="/pengguna.js"></script>
 </body>
