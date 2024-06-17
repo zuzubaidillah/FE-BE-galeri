@@ -14,6 +14,7 @@ document.getElementById('login-form').addEventListener('submit', async function 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const errorMessage = document.getElementById('error-message');
+    const countdownElement = document.getElementById('countdown');
 
     try {
         // Lakukan permintaan (request) POST ke endpoint login
@@ -39,10 +40,20 @@ document.getElementById('login-form').addEventListener('submit', async function 
 
         if (data.token) {
             localStorage.setItem('token', data.token);
-            errorMessage.innerText = 'Login berhasil!';
             errorMessage.style.color = 'green';
-            // Redirect ke halaman lain atau lakukan tindakan setelah login berhasil
-            window.location.href = '/dashboard.html';
+
+            // Hitungan mundur
+            let countdown = 5;
+            errorMessage.innerText = `Login berhasil! Anda akan diarahkan dalam ${countdown} detik.`;
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                errorMessage.innerText = `Login berhasil! Anda akan diarahkan dalam ${countdown} detik.`;
+                if (countdown === 0) {
+                    clearInterval(countdownInterval);
+                    // Redirect ke halaman lain atau lakukan tindakan setelah login berhasil
+                    window.location.href = '/dashboard.html';
+                }
+            }, 1000);
         } else {
             errorMessage.innerText = data.message || 'Login gagal';
         }
