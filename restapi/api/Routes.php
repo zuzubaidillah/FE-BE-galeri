@@ -97,6 +97,12 @@ Route::get($base_url . "/api/users", function (){
             echo json_encode(['message' => 'users tidak ditemukan']);
             exit();
         }
+        // harus level super admin
+        if ($result['level'] !== 'super admin') {
+            http_response_code(403); // not access
+            echo json_encode(['message' => 'Akses ditolak. Anda bukan level super admin.']);
+            exit();
+        }
     } catch (Exception $e) {
         http_response_code(401); // Unauthorized
         echo json_encode(['message' => 'Token tidak valid: ' . $e->getMessage()]);
@@ -104,7 +110,7 @@ Route::get($base_url . "/api/users", function (){
     }
 
     $controller = new UsersController();
-    $controller->index_ambil_data();
+    $controller->index_ambil_data($result);
 });
 
 Route::get($base_url . "/api/users/{users_id}", function ($model_users_id){
@@ -135,6 +141,12 @@ Route::get($base_url . "/api/users/{users_id}", function ($model_users_id){
         if (!$result) {
             http_response_code(401);
             echo json_encode(['message' => 'users tidak ditemukan']);
+            exit();
+        }
+        // harus level super admin
+        if ($result['level'] !== 'super admin') {
+            http_response_code(403); // not access
+            echo json_encode(['message' => 'Akses ditolak. Anda bukan level super admin.']);
             exit();
         }
     } catch (Exception $e) {
@@ -177,16 +189,16 @@ Route::post($base_url . "/api/users", function (){
             echo json_encode(['message' => 'users tidak ditemukan']);
             exit();
         }
+
+        // harus level super admin
+        if ($result['level'] !== 'super admin') {
+            http_response_code(403); // not access
+            echo json_encode(['message' => 'Akses ditolak. Anda bukan level super admin.']);
+            exit();
+        }
     } catch (Exception $e) {
         http_response_code(401); // Unauthorized
         echo json_encode(['message' => 'Token tidak valid: ' . $e->getMessage()]);
-        exit();
-    }
-
-    // harus level super admin
-    if ($result['level'] !== 'super admin') {
-        http_response_code(403); // not access
-        echo json_encode(['message' => 'Akses ditolak. Anda bukan level super admin.']);
         exit();
     }
 
@@ -224,16 +236,16 @@ Route::put($base_url . "/api/users/{users_id}", function ($param_users_id){
             echo json_encode(['message' => 'users tidak ditemukan']);
             exit();
         }
+
+        // harus level super admin
+        if ($current_user['level'] !== 'super admin') {
+            http_response_code(403); // not access
+            echo json_encode(['message' => 'Akses ditolak. Anda bukan level super admin.']);
+            exit();
+        }
     } catch (Exception $e) {
         http_response_code(401); // Unauthorized
         echo json_encode(['message' => 'Token tidak valid: ' . $e->getMessage()]);
-        exit();
-    }
-
-    // harus level super admin
-    if ($current_user['level'] !== 'super admin') {
-        http_response_code(403); // not access
-        echo json_encode(['message' => 'Akses ditolak. Anda bukan level super admin.']);
         exit();
     }
 
@@ -271,16 +283,16 @@ Route::delete($base_url . "/api/users/{users_id}", function ($param_users_id){
             echo json_encode(['message' => 'users tidak ditemukan']);
             exit();
         }
+
+        // harus level super admin
+        if ($current_user['level'] !== 'super admin') {
+            http_response_code(403); // not access
+            echo json_encode(['message' => 'Akses ditolak. Anda bukan level super admin.']);
+            exit();
+        }
     } catch (Exception $e) {
         http_response_code(401); // Unauthorized
         echo json_encode(['message' => 'Token tidak valid: ' . $e->getMessage()]);
-        exit();
-    }
-
-    // harus level super admin
-    if ($current_user['level'] !== 'super admin') {
-        http_response_code(403); // not access
-        echo json_encode(['message' => 'Akses ditolak. Anda bukan level super admin.']);
         exit();
     }
 

@@ -17,12 +17,20 @@ class Users
         $this->db = new Database();
     }
 
-    public function allData()
+    public function allData($filter_q)
     {
-        $query = "SELECT id, nama, email, level, tgl_buat, tgl_update
-        FROM users
+        $where = "";
+
+        if ($filter_q != "") {
+            $where = " WHERE nama LIKE :filter_q";
+        }
+        $query = "SELECT id, nama, no_telpon, email, level, tgl_buat, tgl_update
+        FROM users $where
         ORDER BY tgl_buat DESC";
         $this->db->query($query);
+        if ($filter_q != "") {
+            $this->db->bind("filter_q", "%$filter_q%");
+        }
         return $this->db->resultSet();
     }
 

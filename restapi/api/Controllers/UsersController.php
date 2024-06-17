@@ -9,9 +9,13 @@ use Model\Users;
 
 class UsersController
 {
-    public function index_ambil_data() {
+    public function index_ambil_data($current_users) {
+        $filter_q = "";
+        if (isset($_GET['filter_q'])) {
+            $filter_q = $_GET['filter_q'];
+        }
         $user = new Users();
-        $result = $user->allData();
+        $result = $user->allData($filter_q);
         echo json_encode(['data' => $result]);
     }
 
