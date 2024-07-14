@@ -8,7 +8,7 @@
 - copy pasti project ke folder
 - xampp/htdocs/smkti/....
 
-# menyiapkan database
+## menyiapkan database
 - buka readme.MD pada folder restapi
 - copy kode sql 
 - buka browser kesukaan kalian
@@ -16,3 +16,9 @@
     - lalu cari menu SQL
     - paste kode sql, dan jalankan
     - database berhasil dibuat
+
+## menjalankan proyek
+- buka browser
+- isi url dengan localhost/smkti/FE-BE-galeri/frontend
+- yang kalian jalankan hanya folder frontend saja
+- kalian akan ditampilkan dalam bentuk user interface
