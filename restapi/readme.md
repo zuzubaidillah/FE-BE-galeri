@@ -2,6 +2,7 @@
 
 ```sql
 create database proyek_galeri;
+use proyek_galeri;
 create table users
 (
     id         int auto_increment primary key,

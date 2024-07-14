@@ -23,6 +23,7 @@ Route::post($base_url . "/api/auth/login", function (){
     $controller = new AuthController();
     $controller->login();
 });
+
 Route::get($base_url . "/api/auth/current", function (){
     // ambil bearer Token yang di request client
     $headers = getallheaders();
