@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
     if (token) {
         // Redirect ke halaman dashboard jika token ditemukan
-        window.location.href = '/dashboard.html';
+        window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/dashboard.html";
     }
 });
 
@@ -51,7 +51,7 @@ document.getElementById('login-form').addEventListener('submit', async function 
                 if (countdown === 0) {
                     clearInterval(countdownInterval);
                     // Redirect ke halaman lain atau lakukan tindakan setelah login berhasil
-                    window.location.href = '/dashboard.html';
+                    window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/dashboard.html";
                 }
             }, 1000);
         } else {

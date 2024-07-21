@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				if (response.status === 401) {
 					localStorage.clear()
 					alert(errorData.message)
-					window.location.href = "/index.html";
+					window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
 				}else if (response.status === 403) {
 					throw new Error(errorData.message);
 				}else {

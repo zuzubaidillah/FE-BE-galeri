@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	const token = localStorage.getItem("token");
 	if (!token) {
 		// Redirect ke halaman dashboard jika token ditemukan
-		window.location.href = "/index.html";
+		window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
 	}
 
 	getCurrentUsers()
@@ -14,7 +14,7 @@ const onLogout = document.getElementById("menu-logout");
 
 onLogout.onclick = () => {
 	localStorage.clear()
-	window.location.href = "/index.html";
+	window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
 }
 
 async function getCurrentUsers() {
@@ -35,7 +35,7 @@ async function getCurrentUsers() {
 			if (response.status === 401) {
 				localStorage.clear()
 				alert(errorData.message)
-				window.location.href = "/index.html";
+				window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
 			}
 			return;
 		}

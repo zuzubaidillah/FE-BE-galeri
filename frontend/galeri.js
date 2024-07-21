@@ -4,7 +4,7 @@ let debounceTimeout;
 document.addEventListener("DOMContentLoaded", () => {
 	if (!token) {
 		localStorage.clear()
-		window.location.href = "/index.html"; // Redirect ke halaman login jika tidak ada token
+		window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html"; // Redirect ke halaman login jika tidak ada token
 		return;
 	}
 
@@ -55,7 +55,7 @@ async function getGaleri(query = "") {
 			if (response.status === 401) {
 				localStorage.clear()
 				alert(errorData.message)
-				window.location.href = "/index.html";
+				window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
 			}
 			throw new Error("Gagal memuat data galeri");
 		}
@@ -113,7 +113,7 @@ async function deleteGaleri(id) {
 			if (response.status === 401) {
 				localStorage.clear()
 				alert(errorData.message)
-				window.location.href = "/index.html";
+				window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
 			}
 
 			throw new Error(errorData.message);
@@ -157,7 +157,7 @@ async function editNama(id) {
 			if (response.status === 401) {
 				localStorage.clear()
 				alert(errorData.message)
-				window.location.href = "/index.html";
+				window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
 			}
 
 			throw new Error(errorData.message);
@@ -220,7 +220,7 @@ async function editImage(id, newImageFile) {
 			if (response.status === 401) {
 				localStorage.clear()
 				alert(errorData.message)
-				window.location.href = "/index.html";
+				window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
 			}
 
 			throw new Error(errorData.message);

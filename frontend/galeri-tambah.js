@@ -47,14 +47,14 @@ document.addEventListener("DOMContentLoaded", () => {
 				if (response.status === 401) {
 					localStorage.clear();
 					alert(errorData.message);
-					window.location.href = "/index.html";
+					window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
 				}
 
 				throw new Error(errorData.message);
 			}
 
 			// ketika berhasil pindah halaman
-			window.location.href = "/galeri.html";
+			window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/galeri.html";
 		} catch (error) {
 			console.error("Error:", error);
 			showMessage(`Error: ${error.message}`, "red");

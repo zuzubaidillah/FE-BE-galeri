@@ -44,7 +44,7 @@ async function deleteUser(users_id) {
 			if (response.status === 401) {
 				localStorage.clear()
 				alert(errorData.message)
-				window.location.href = "/index.html";
+				window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
 			}
 
 			throw new Error(errorData.message);
@@ -86,7 +86,7 @@ async function getUsers() {
 			if (response.status === 401) {
 				localStorage.clear()
 				alert(errorData.message)
-				window.location.href = "/index.html";
+				window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
 			}
 
 			tbody.innerHTML = "";
