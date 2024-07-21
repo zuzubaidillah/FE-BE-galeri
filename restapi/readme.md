@@ -36,4 +36,10 @@ create table galeri
     constraint fk_gallery_user_id
         foreign key (users_id) references users (id)
 );
+
+INSERT INTO proyek_galeri.users 
+    (id, nama, no_telpon, email, password, level, tgl_buat, tgl_update) 
+    VALUES 
+    (1, 'super admin', '6289676041493', 'superadmin@gmail.com', '$2y$10$FYwzWwGBKYKplWgt8smt8eMhPrFrUJedA5zhu1BbPvCHWN4J8GzdO', 'super admin', '2024-01-01 00:00:00', '2024-01-01 00:00:00');
+
 ```
