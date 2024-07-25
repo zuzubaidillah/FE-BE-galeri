@@ -17,6 +17,12 @@
     - paste kode sql, dan jalankan
     - database berhasil dibuat
 
+## persiapkan proyek frontend
+- bukan config.js
+- BASE_URL variable ini mengarah ke PATH frontend
+- API_BASE_URL variable ini mengarah ke PATH restapi
+- tinggal kalian sesuaikan dengan lokasi proyeknya
+
 ## menjalankan proyek
 - buka browser
 - isi url dengan localhost/smkti/FE-BE-galeri/frontend
