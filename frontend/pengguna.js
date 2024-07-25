@@ -29,7 +29,7 @@ async function deleteUser(users_id) {
 
 	try {
 
-		const response = await fetch(`http://localhost/smkti/FE-BE-galeri/restapi/api/users/${users_id}`, {
+		const response = await fetch(`${API_BASE_URL}/api/users/${users_id}`, {
 			method: "DELETE",
 			headers: {
 				"Authorization": `Bearer ${token}`,
@@ -44,7 +44,7 @@ async function deleteUser(users_id) {
 			if (response.status === 401) {
 				localStorage.clear()
 				alert(errorData.message)
-				window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
+				window.location.href = `${BASE_URL}/index.html`;
 			}
 
 			throw new Error(errorData.message);
@@ -70,7 +70,7 @@ async function getUsers() {
 		const tr = document.createElement("tr");
 		tr.innerHTML = `<td colspan="6">Sedang mengambil data...</td>`;
 		tbody.appendChild(tr);
-		const response = await fetch("http://localhost/smkti/FE-BE-galeri/restapi/api/users", {
+		const response = await fetch(`${API_BASE_URL}/api/users`, {
 			method: "GET",
 			headers: {
 				"Authorization": `Bearer ${token}`,
@@ -86,7 +86,7 @@ async function getUsers() {
 			if (response.status === 401) {
 				localStorage.clear()
 				alert(errorData.message)
-				window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
+				window.location.href = `${BASE_URL}/index.html`;
 			}
 
 			tbody.innerHTML = "";

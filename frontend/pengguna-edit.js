@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		try {
 			isLoading = true
-			const response = await fetch(`http://localhost/smkti/FE-BE-galeri/restapi/api/users/${userId}`, {
+			const response = await fetch(`${API_BASE_URL}/api/users/${userId}`, {
 				method: 'GET',
 				headers: {
 					'Authorization': `Bearer ${token}`,
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				if (response.status === 401) {
 					localStorage.clear()
 					alert(errorData.message)
-					window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
+					window.location.href = `${BASE_URL}/index.html`;
 				}else if (response.status === 403) {
 					throw new Error(errorData.message);
 				}else {
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		const messageElement = document.getElementById('message');
 		isLoading = true
 		try {
-			const response = await fetch(`http://localhost/smkti/FE-BE-galeri/restapi/api/users/${userId}`, {
+			const response = await fetch(`${API_BASE_URL}/api/users/${userId}`, {
 				method: "PUT",
 				headers: {
 					"Authorization": `Bearer ${token}`,
@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				if (response.status === 401) {
 					localStorage.clear()
 					alert(errorData.message)
-					window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
+					window.location.href = `${BASE_URL}/index.html`;
 				}else if (response.status === 403) {
 					throw new Error(errorData.message);
 				}else {

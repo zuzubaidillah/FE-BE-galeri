@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
     if (token) {
         // Redirect ke halaman dashboard jika token ditemukan
-        window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/dashboard.html";
+        window.location.href = `${BASE_URL}/dashboard.html`;
     }
 });
 
@@ -18,7 +18,7 @@ document.getElementById('login-form').addEventListener('submit', async function 
 
     try {
         // Lakukan permintaan (request) POST ke endpoint login
-        const response = await fetch('http://localhost/smkti/FE-BE-galeri/restapi/api/auth/login', {
+        const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -51,7 +51,7 @@ document.getElementById('login-form').addEventListener('submit', async function 
                 if (countdown === 0) {
                     clearInterval(countdownInterval);
                     // Redirect ke halaman lain atau lakukan tindakan setelah login berhasil
-                    window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/dashboard.html";
+                    window.location.href = `${BASE_URL}/dashboard.html`;
                 }
             }, 1000);
         } else {

@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		isLoading = true;
 
 		try {
-			const response = await fetch("http://localhost/smkti/FE-BE-galeri/restapi/api/galeri", {
+			const response = await fetch(`${API_BASE_URL}/api/galeri`, {
 				method: "POST",
 				headers: {
 					"Authorization": `Bearer ${token}`,
@@ -47,14 +47,14 @@ document.addEventListener("DOMContentLoaded", () => {
 				if (response.status === 401) {
 					localStorage.clear();
 					alert(errorData.message);
-					window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
+					window.location.href = `${BASE_URL}/index.html`;
 				}
 
 				throw new Error(errorData.message);
 			}
 
 			// ketika berhasil pindah halaman
-			window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/galeri.html";
+			window.location.href = `${BASE_URL}/galeri.html`;
 		} catch (error) {
 			console.error("Error:", error);
 			showMessage(`Error: ${error.message}`, "red");

@@ -4,7 +4,7 @@ let debounceTimeout;
 document.addEventListener("DOMContentLoaded", () => {
 	if (!token) {
 		localStorage.clear()
-		window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html"; // Redirect ke halaman login jika tidak ada token
+		window.location.href = `${BASE_URL}/index.html`; // Redirect ke halaman login jika tidak ada token
 		return;
 	}
 
@@ -35,7 +35,7 @@ async function getGaleri(query = "") {
 	preloadingModal.style.display = "block";
 
 	try {
-		let url = "http://localhost/smkti/FE-BE-galeri/restapi/api/galeri";
+		let url = `${API_BASE_URL}/api/galeri`;
 		if (query) {
 			url += `?filter_q=${query}`;
 		}
@@ -55,7 +55,7 @@ async function getGaleri(query = "") {
 			if (response.status === 401) {
 				localStorage.clear()
 				alert(errorData.message)
-				window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
+				window.location.href = `${BASE_URL}/index.html`;
 			}
 			throw new Error("Gagal memuat data galeri");
 		}
@@ -98,7 +98,7 @@ async function deleteGaleri(id) {
 	preloadingModal.style.display = "block";
 
 	try {
-		const response = await fetch(`http://localhost/smkti/FE-BE-galeri/restapi/api/galeri/${id}`, {
+		const response = await fetch(`${API_BASE_URL}/api/galeri/${id}`, {
 			method: "DELETE",
 			headers: {
 				"Authorization": `Bearer ${token}`,
@@ -113,7 +113,7 @@ async function deleteGaleri(id) {
 			if (response.status === 401) {
 				localStorage.clear()
 				alert(errorData.message)
-				window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
+				window.location.href = `${BASE_URL}/index.html`;
 			}
 
 			throw new Error(errorData.message);
@@ -141,7 +141,7 @@ async function editNama(id) {
 	preloadingModal.style.display = "block";
 
 	try {
-		const response = await fetch(`http://localhost/smkti/FE-BE-galeri/restapi/api/galeri/${id}`, {
+		const response = await fetch(`${API_BASE_URL}/api/galeri/${id}`, {
 			method: "PUT",
 			headers: {
 				"Authorization": `Bearer ${token}`,
@@ -157,7 +157,7 @@ async function editNama(id) {
 			if (response.status === 401) {
 				localStorage.clear()
 				alert(errorData.message)
-				window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
+				window.location.href = `${BASE_URL}/index.html`;
 			}
 
 			throw new Error(errorData.message);
@@ -205,7 +205,7 @@ async function editImage(id, newImageFile) {
 		const formData = new FormData();
 		formData.append("image", newImageFile);
 
-		const response = await fetch(`http://localhost/smkti/FE-BE-galeri/restapi/api/galeri/${id}/image`, {
+		const response = await fetch(`${API_BASE_URL}/api/galeri/${id}/image`, {
 			method: "POST",
 			headers: {
 				"Authorization": `Bearer ${token}`
@@ -220,7 +220,7 @@ async function editImage(id, newImageFile) {
 			if (response.status === 401) {
 				localStorage.clear()
 				alert(errorData.message)
-				window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
+				window.location.href = `${BASE_URL}/index.html`;
 			}
 
 			throw new Error(errorData.message);

@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	const token = localStorage.getItem("token");
 	if (!token) {
 		// Redirect ke halaman dashboard jika token ditemukan
-		window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
+		window.location.href = `${BASE_URL}/index.html`;
 	}
 
 	getCurrentUsers()
@@ -14,7 +14,7 @@ const onLogout = document.getElementById("menu-logout");
 
 onLogout.onclick = () => {
 	localStorage.clear()
-	window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
+	window.location.href = `${BASE_URL}/index.html`;
 }
 
 async function getCurrentUsers() {
@@ -22,7 +22,7 @@ async function getCurrentUsers() {
 
 	try {
 		// Lakukan permintaan (request) POST ke endpoint login
-		const response = await fetch("http://localhost/smkti/FE-BE-galeri/restapi/api/auth/current", {
+		const response = await fetch(`${API_BASE_URL}/api/auth/current`, {
 			method: "GET",
 			headers: {
 				Authorization: `Bearer ${token}`,
@@ -35,7 +35,7 @@ async function getCurrentUsers() {
 			if (response.status === 401) {
 				localStorage.clear()
 				alert(errorData.message)
-				window.location.href = "http://localhost/smkti/FE-BE-galeri/frontend/index.html";
+				window.location.href = `${BASE_URL}/index.html`;
 			}
 			return;
 		}
